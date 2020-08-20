@@ -29,7 +29,7 @@ def MakeBackground(parent, color):
     bgc.reparentTo(parent)
     return bgc
 
-# turns a PNG file into a packground tile    
+# turns a PNG file into a background tile    
 def MakeTile(parent, texpath):
     cm = CardMaker('card')    
     tex = loader.loadTexture(texpath)
@@ -77,6 +77,7 @@ class Sprite():
             self.card.setTexture(self.textures['r'][self.frame])
             self.card.clearTexTransform()
         elif dir == 'l':
+            # left-facing sprite flips the UVs of the right-facing to mirror the sprite
             self.card.setTexture(self.textures['r'][self.frame])
             self.card.setTexScale(TextureStage.getDefault(), -1, 1)
         else: #assume down
@@ -165,7 +166,7 @@ class RetroEngine(ShowBase):
             tileP = NodePath('tile')
             tileP.reparentTo(retro)
             for y in range (0,int(buf_size/16)):
-                if True:
+                if random.randint(1,2) == 2:
                     tile = retro.attachNewNode("Placeholder")
                     tile.setPos((x*32)/buf_size-1,0,(y*32)/buf_size-1)
                     baseTile.instanceTo(tile)
