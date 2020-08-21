@@ -29,7 +29,7 @@ def MakeBackground(parent, color):
     bgc.reparentTo(parent)
     return bgc
 
-# turns a PNG file into a background tile    
+# turns a PNG file into a packground tile    
 def MakeTile(parent, texpath):
     cm = CardMaker('card')    
     tex = loader.loadTexture(texpath)
@@ -39,8 +39,12 @@ def MakeTile(parent, texpath):
     cm.setUvRange(tex)
     card = render.attachNewNode(cm.generate())
     card.setTexture(tex)    
+    
+    x = tex.get_x_size()*2
+    y = tex.get_y_size()*2
 
-    card.setScale(32.0/buf_size)
+    #card.setScale(32.0/buf_size)
+    card.setScale(x/buf_size,1,y/buf_size)
     card.setTransparency(TransparencyAttrib.MAlpha, 1)
 
     card.reparentTo(parent)
@@ -61,7 +65,13 @@ class Sprite():
         card = render.attachNewNode(cm.generate())
         card.setTexture(texd1)   
         
-        card.setScale(32.0/buf_size)
+        x = texd1.get_x_size()*2
+        y = texd1.get_y_size()*2
+        
+        print(x,y)
+        
+        #card.setScale(36.0/buf_size)
+        card.setScale(x/buf_size,1,y/buf_size)
         card.setTransparency(TransparencyAttrib.MAlpha, 1)
 
         card.reparentTo(parent)
@@ -77,7 +87,6 @@ class Sprite():
             self.card.setTexture(self.textures['r'][self.frame])
             self.card.clearTexTransform()
         elif dir == 'l':
-            # left-facing sprite flips the UVs of the right-facing to mirror the sprite
             self.card.setTexture(self.textures['r'][self.frame])
             self.card.setTexScale(TextureStage.getDefault(), -1, 1)
         else: #assume down
@@ -88,7 +97,6 @@ class Sprite():
     def cycle(self):
         self.frame = not self.frame
         self.face(self.facing)
-    
         
     
 class RetroEngine(ShowBase):
@@ -142,8 +150,8 @@ class RetroEngine(ShowBase):
 
         # Set up a not-quite GBA-sized viewport on the buffer
         
-        x_range = self.x_size/buf_size
-        y_range = self.y_size/buf_size
+        x_range = (self.x_size/buf_size)/2
+        y_range = (self.y_size/buf_size)/2
         cm.setUvRange((0.5-x_range,0.5-y_range),(0.5+x_range, 0.5+y_range))
 
         # Now place the card in the scene graph and apply the texture to it.
